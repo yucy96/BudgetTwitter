@@ -1,0 +1,25 @@
+<% include ../partials/header %>
+<div class="container">
+    <header class="jumbotron">
+        <h1><%= user.firstname %>'s Posts</h1>
+        <% if (user._id.equals(currentUser._id)){ %>
+            <p>
+                <a class="btn btn-primary" href="/user/<%= currentUser._id %>/feed/new">Make a new feed</a>
+            </p>
+        <% } %>
+        <a class="btn btn-success" href="/user/<%= user._id %>/profile">See profile</a>
+    </header>
+    <div>
+        <% feeds.forEach(function(feeds){ %>
+        <% if (user._id.equals(feeds.author.id)){ %>
+            <div class="well">
+                <h2><%= feeds.author.firstname %></h2>
+                <p><%= feeds.content %></p>
+            </div>
+        <% } %>
+        <% }); %>
+    </div>
+</div>
+
+
+<% include ../partials/footer %>

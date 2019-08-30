@@ -1,0 +1,24 @@
+<% include ../partials/header %>
+<div class="container">
+    <header class="jumbotron">
+        <h1>Welcome <%= currentUser.firstname %></h1>
+        <p>
+            <a class="btn btn-primary btn-lg" href="/user/<%= currentUser._id %>/feed/new">Make a new feed</a>
+        </p>
+    </header>
+    <div>
+        <% feeds.forEach(function(feeds){ %>
+        <div class="well">
+                <a href="/user/<%= feeds.author.id %>/profile"><%= feeds.author.firstname %></a>
+            <p><%= feeds.content %></p>
+        </div>
+
+        <% }); %>
+    </div>
+
+</div>
+
+
+
+
+<% include ../partials/footer %>
