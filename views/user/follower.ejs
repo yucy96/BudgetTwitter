@@ -1,0 +1,30 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <header class="jumbotron">
+        <% if (user._id.equals(currentUser._id)){ %>
+        <h1>Your Followers</h1>
+        <% } else { %>
+        <h1><%= user.firstname %>'s Followers</h1>
+        <% } %>
+        <a href="/user/<%= user._id %>/profile">Go back</a>
+    </header>
+</div>
+
+<div class="container">
+    <div class="col-sm-4">
+        <h3>Following</h3>
+        <% user.follower.forEach(function(follower){ %>
+        <div class="well">
+            <a href="/user/<%= follower._id %>/profile"><%= follower.firstname + " " + follower.lastname %></a>
+        </div>
+        <% }); %>
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+</div>
+
+
+
+<% include ../partials/footer %>

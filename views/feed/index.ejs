@@ -11,10 +11,13 @@
     </header>
     <div>
         <% feeds.forEach(function(feeds){ %>
-        <% if (user._id.equals(feeds.author.id)){ %>
+        <% if (user._id.equals(feeds.author_id)){ %>
             <div class="well">
                 <h2><%= feeds.author.firstname %></h2>
                 <p><%= feeds.content %></p>
+                <form class="delete-form" action="/user/<%= currentUser._id %>/feed/<%= feeds._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-xs btn-danger">Delete</button>
+                </form>
             </div>
         <% } %>
         <% }); %>

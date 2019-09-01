@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var feedSchema = new mongoose.Schema({
+var commentSchema = new mongoose.Schema({
     content: String,
     author_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -10,7 +10,11 @@ var feedSchema = new mongoose.Schema({
         username: String,
         firstname: String,
         lastname: String
+    },
+    feed_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Feed"
     }
 });
 
-module.exports = mongoose.model("Feed", feedSchema);
+module.exports = mongoose.model("Comment", commentSchema);

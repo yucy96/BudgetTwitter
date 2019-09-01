@@ -17,7 +17,7 @@ router.get('/:id/index', middleware.isLoggedIn, function(req, res, next) {
 });
 
 router.get('/:id/profile', middleware.isLoggedIn, function (req, res) {
-    User.findById(req.params.id, function (err, user) {
+    User.findById(req.params.id).populate("following").exec(function (err, user) {
         if (err) {
             res.send(err);
         } else {
@@ -26,6 +26,25 @@ router.get('/:id/profile', middleware.isLoggedIn, function (req, res) {
     });
 });
 
+router.get('/:id/following', middleware.isLoggedIn, function (req, res) {
+    User.findById(req.params.id).populate("following").exec(function (err, user) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.render('user/following', {user: user});
+        }
+    });
+});
+
+router.get('/:id/follower', middleware.isLoggedIn, function (req, res) {
+    User.findById(req.params.id).populate("follower").exec(function (err, user) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.render('user/follower', {user: user});
+        }
+    });
+});
 
 router.put('/:id/profile', middleware.isLoggedIn, function (req, res) {
     if (req.user.following.includes(req.params.id)){
@@ -39,19 +58,13 @@ router.put('/:id/profile', middleware.isLoggedIn, function (req, res) {
                 console.log(err);
                 res.redirect("/");
             } else {
-                User.create(followee, function (err, follow) {
-                    if (err) {
-                        req.flash("error", "Something went wrong");
-                        console.log(err);
-                        res.redirect("/");
-                    } else {
-                        req.user.following.push(follow);
-                        req.user.save();
-                        req.flash("success", "Successfully followed");
-                        console.log("Successfully followed" + req.user.following);
-                        res.redirect("back");
-                    }
-                })
+                req.user.following.push(followee);
+                req.user.save();
+                followee.follower.push(req.user);
+                followee.save();
+                req.flash("success", "Successfully followed");
+                console.log("Successfully followed" + req.user.following);
+                res.redirect("back");
             }
         });
     }
@@ -64,7 +77,22 @@ router.delete('/:id/profile', middleware.isLoggedIn, function (req, res) {
                 console.log(err);
                 res.redirect("/");
             } else {
-                res.redirect("back")
+                User.findById(req.params.id, function(err, followee){
+                    if (err) {
+                        console.log(err);
+                        res.redirect("back");
+                    } else {
+                        User.update(followee, {$pull: {follower: req.user._id}}, function(err){
+                            if (err) {
+                                console.log(err);
+                                res.redirect("back");
+                            } else {
+                                console.log("success!");
+                                res.redirect("back")
+                            }
+                        })
+                    }
+                });
             }
         });
     } else {
@@ -72,7 +100,27 @@ router.delete('/:id/profile', middleware.isLoggedIn, function (req, res) {
         req.flash("error", "You didn't follow this person!");
         res.redirect("back");
     }
+});
 
+router.get('/:id/profile/edit', function(req, res){
+    res.render("user/edit");
+});
+
+router.put('/:id/profile/edit', function(req, res){
+    User.findByIdAndUpdate(req.params.id, req.body.user, function (err, updatedUser) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            Feed.updateMany({_id: { $in: updatedUser.feed } }, {$set: {author: updatedUser}}, function(err){
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.redirect("/user/" + req.params.id + "/profile");
+                }
+            });
+
+        }
+    })
 });
 
 // router.get('/:id/feed', function (req, res) {
@@ -85,12 +133,12 @@ router.get('/:id/feed', middleware.isLoggedIn, function(req, res) {
         if (err) {
             res.send(err);
         } else {
-            console.log(user);
+            // console.log(user);
             Feed.find({}, function (err, feeds) {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log(feeds);
+                    // console.log(feeds);
                     res.render("feed/index", {user: user, feeds: feeds});
                 }
             });
@@ -104,19 +152,40 @@ router.get('/:id/feed/new', middleware.isLoggedIn, function (req, res) {
 
 router.post('/:id/feed', middleware.isLoggedIn, function (req, res) {
     var content = req.body.content;
+    var author_id = req.user._id;
     var author = {
-        id: req.user._id,
         username: req.user.username,
-        firstname: req.user.firstname
+        firstname: req.user.firstname,
+        lastname: req.user.lastname
     };
-    var newFeed = {content: content, author: author};
+    var newFeed = {content: content, author_id: author_id, author: author};
     Feed.create(newFeed, function(e, newlyCreated){
         if (e){
             console.log(e);
         } else {
+            req.user.feed.push(newlyCreated._id);
+            req.user.save();
             res.redirect("/user/" + req.user._id + "/feed");
         }
     });
+});
+
+router.delete('/:id/feed/:feed_id', middleware.isLoggedIn, function(req, res){
+    Feed.findByIdAndRemove(req.params.feed_id, function (err, deletedFeed) {
+        if (err) {
+            console.log(err);
+            res.redirect("back");
+        } else {
+            User.update(req.user, {$pull: {feed: req.params.feed_id}}, function (err){
+                if (err) {
+                    console.log(err);
+                    res.redirect("back");
+                } else {
+                    res.redirect("back");
+                }
+            });
+        }
+    })
 });
 
 
