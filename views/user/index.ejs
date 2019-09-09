@@ -3,14 +3,20 @@
     <header class="jumbotron">
         <h1>Welcome, <%= currentUser.firstname %></h1>
         <p>
-            <a class="btn btn-primary btn-lg" href="/user/<%= currentUser._id %>/feed/new">Make a new feed</a>
+            <a class="btn btn-jump btn-lg" href="/user/<%= currentUser._id %>/feed/new">Make a new feed</a>
         </p>
     </header>
     <div>
         <% feeds.forEach(function(feeds){ %>
         <div class="well">
-                <a href="/user/<%= feeds.author_id %>/profile"><%= feeds.author.firstname %></a>
-            <p><%= feeds.content %></p>
+            <a href="/user/<%= feeds.author_id %>/profile" class="link-name"><%= feeds.author.firstname %></a>
+            <p class="content">
+                <%- feeds.content.substring(0, 100) %>
+                <% if (feeds.content.length > 100) { %>
+                ...
+                <% } %>
+            </p>
+            <a href="/user/<%= feeds.author_id %>/feed/<%= feeds._id %>">Read more</a>
         </div>
         <% }); %>
     </div>

@@ -1,11 +1,81 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: black;
 }
 
 a {
-  color: #00B7FF;
+    color: gold;
+    font-size: medium;
 }
 
 .follow-form{
-  display: inline;
+    display: inline;
+}
+
+.navbar{
+    background-color: gold;
+
+}
+
+.navbar-brand{
+    color: darkviolet;
+}
+
+.nav-link{
+    color: black;
+}
+
+.jumbotron{
+    background-image: url("https://img.freepik.com/free-vector/diagonal-lines-vector-background-design_1017-12303.jpg?size=626&ext=jpg");
+    background-size: cover;
+}
+
+h1{
+    font-weight: bold;
+}
+
+.h1-style{
+    color: darkviolet;
+}
+
+.btn-jump{
+    background-color: darkviolet;
+    color: white;
+}
+
+.btn-jump:hover{
+    background-color: #9950df;
+    color: white;
+}
+
+.well{
+    padding: 30px 30px;
+}
+
+.link-name{
+    color: darkviolet;
+    font: 30px bold;
+}
+
+.content{
+    color: lightcyan;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.text-name{
+    color: white;
+}
+
+.feed-page{
+    margin: 5% 10%;
+}
+
+.table-head{
+    color: gold;
+    font-weight: bold;
+}
+
+.container-edit{
+    margin: 5% 20%;
 }

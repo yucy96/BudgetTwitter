@@ -1,0 +1,20 @@
+<% include ../partials/header %>
+<div class="container feed-page">
+    <a href="/user/<%= feed.author_id %>/profile" class="link-name"><%= feed.author.firstname %></a>
+    <p class="content"><%= feed.content %></p>
+    <a class="btn btn-jump btn-xs" href="/user/<%= user_id %>/feed/<%= feed._id %>/newcomment">Comment</a>
+    <% if (currentUser._id.equals(user_id)) { %>
+    <form class="delete-form" style="display: inline" action="/user/<%= user_id %>/feed/<%= feed._id %>?_method=DELETE" method="POST">
+        <button class="btn btn-xs btn-danger">Delete</button>
+    </form>
+    <% } %>
+    <div class="well">
+        <% feed.comment.forEach(function(comment){ %>
+        <h4 class="text-name"><%= comment.author.firstname %></h4>
+        <p class="content"><%= comment.content %></p>
+        <% }); %>
+    </div>
+</div>
+
+
+<% include ../partials/footer %>

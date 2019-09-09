@@ -1,11 +1,23 @@
 <% include partials/header %>
 
-<div class="container">
-    <h1>Login</h1>
-    <form action="/login" method="post">
-        <input type="email" name="username" placeholder="xxx@xxx">
-        <input type="password" name="password" placeholder="******">
-        <input type="submit" value="Login">
+<div class="container container-edit">
+    <h1 class="h1-style">Login</h1>
+    <form class="table-head" action="/login" method="POST">
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-6">
+                <input type="email" class="form-sign" id="email" name="username" placeholder="xxx@xxx">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-6">
+                <input type="password" class="form-sign" id="password" name="password" placeholder="******">
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-jump">Login</button>
+        </div>
     </form>
 </div>
 

@@ -48,11 +48,13 @@ router.get('/login', function(req, res){
 
 router.post("/login", passport.authenticate("local",
     {failureRedirect: '/login'}), function(req, res){
+  req.flash("success", "You logged in!");
   res.redirect("/user/" + req.user._id + "/index");
 });
 
 router.get("/logout", middleware.isLoggedIn, function (req, res) {
   req.logout();
+  req.flash("success", "You logged out!");
   res.redirect("/");
 });
 

@@ -10,7 +10,11 @@ var feedSchema = new mongoose.Schema({
         username: String,
         firstname: String,
         lastname: String
-    }
+    },
+    comment: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
+    }]
 });
 
 module.exports = mongoose.model("Feed", feedSchema);

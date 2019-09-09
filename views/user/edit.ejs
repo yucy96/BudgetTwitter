@@ -1,29 +1,29 @@
 <% include ../partials/header %>
 
 
-<div class="container">
-    <h1>Edit Your Profile</h1>
-    <form class="profile-edit" action="/user/<%= currentUser._id %>/profile/edit?_method=PUT" method="POST">
+<div class="container container-edit">
+    <h1 class="h1-style">Edit Your Profile</h1>
+    <form class="profile-edit table-head" action="/user/<%= currentUser._id %>/profile/edit?_method=PUT" method="POST">
         <div class="form-group row">
             <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control-plaintext" id="firstname" name="user[firstname]" value="<%= currentUser.firstname%>">
+                <input type="text" class="form-control-plaintext content" id="firstname" name="user[firstname]" value="<%= currentUser.firstname%>">
             </div>
         </div>
         <div class="form-group row">
             <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control-plaintext" id="lastname" name="user[lastname]" value="<%= currentUser.lastname%>">
+                <input type="text" class="form-control-plaintext content" id="lastname" name="user[lastname]" value="<%= currentUser.lastname%>">
             </div>
         </div>
         <div class="form-group row">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-6">
-                <input type="text" readonly class="form-control-plaintext" id="email" name="user[email]" value="<%= currentUser.username%>">
+                <input type="email" readonly class="form-control-plaintext content" id="email" name="user[email]" value="<%= currentUser.username%>">
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-lg btn-primary">Submit</button>
+            <button class="btn btn-lg btn-jump">Submit</button>
         </div>
     </form>
     <a href="/user/<%= currentUser._id %>/profile">Go Back</a>

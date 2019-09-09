@@ -1,25 +1,34 @@
 <% include ../partials/header %>
 <div class="container">
     <header class="jumbotron">
-        <h1><%= user.firstname %>'s Posts</h1>
+        <h1><%= user.firstname %>'s Posts <a class="btn btn-success" href="/user/<%= user._id %>/profile">See profile</a></h1>
         <% if (user._id.equals(currentUser._id)){ %>
             <p>
-                <a class="btn btn-primary" href="/user/<%= currentUser._id %>/feed/new">Make a new feed</a>
+                <a class="btn btn-jump" href="/user/<%= currentUser._id %>/feed/new">Make a new feed</a>
             </p>
         <% } %>
-        <a class="btn btn-success" href="/user/<%= user._id %>/profile">See profile</a>
     </header>
     <div>
-        <% feeds.forEach(function(feeds){ %>
-        <% if (user._id.equals(feeds.author_id)){ %>
+        <% user.feed.forEach(function(feeds){ %>
             <div class="well">
-                <h2><%= feeds.author.firstname %></h2>
-                <p><%= feeds.content %></p>
-                <form class="delete-form" action="/user/<%= currentUser._id %>/feed/<%= feeds._id %>?_method=DELETE" method="POST">
-                    <button class="btn btn-xs btn-danger">Delete</button>
-                </form>
+                <h2 class="text-name">
+                    <%= feeds.author.firstname %>
+                    <% if (currentUser._id.equals(user._id)) { %>
+                    <form class="delete-form" style="display: inline" action="/user/<%= currentUser._id %>/feed/<%= feeds._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-xs btn-danger">Delete</button>
+                    </form>
+                    <% } %>
+                </h2>
+
+                <p class="content">
+                    <%- feeds.content.substring(0, 100) %>
+                    <% if (feeds.content.length > 100) { %>
+                    ...
+                    <% } %>
+                </p>
+                <a href="/user/<%= feeds.author_id %>/feed/<%= feeds._id %>">Read more</a>
+
             </div>
-        <% } %>
         <% }); %>
     </div>
 </div>

@@ -1,0 +1,20 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <h1 class="h1-style">Make a Comment</h1>
+    <form class="table-head" action="/user/<%= user_id %>/feed/<%= feed_id %>" method="POST">
+        <div class="form-group row">
+            <label for="comment" class="col-sm-2 col-form-label">Comment</label>
+            <div class="col-sm-6">
+                <textarea rows="10" cols="100" type="text" class="form-control" id="comment" name="content" placeholder="Content"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-jump">Submit</button>
+        </div>
+    </form>
+    <a href="/user/<%= user_id %>/feed/<%= feed_id %>">Go Back</a>
+</div>
+
+
+<% include ../partials/footer %>

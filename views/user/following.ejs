@@ -13,7 +13,7 @@
 
 <div class="container">
     <div class="col-sm-4">
-        <h3>Following</h3>
+        <h3 class="h1-style">Following</h3>
         <% user.following.forEach(function(followee){ %>
         <div class="well">
             <a href="/user/<%= followee._id %>/profile"><%= followee.firstname + " " + followee.lastname %></a>
