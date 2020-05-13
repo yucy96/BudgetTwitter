@@ -22,6 +22,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 mongoose.connect("mongodb://localhost/twitter", { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(logger('dev'));
 app.use(express.json());
