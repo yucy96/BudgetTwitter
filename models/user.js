@@ -16,6 +16,10 @@ var userSchema = new mongoose.Schema({
     feed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Feed"
+    }],
+    comment: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
     }]
 });
 

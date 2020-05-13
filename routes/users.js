@@ -5,6 +5,13 @@ var User = require('../models/user');
 var Comment = require('../models/comment');
 var middleware = require("../middleware");
 
+
+async function wait (ms) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms)
+    });
+}
+
 /* GET users listing. */
 router.get('/:id/index', middleware.isLoggedIn, function(req, res, next) {
     Feed.find({}, function (err, feeds) {
@@ -107,17 +114,27 @@ router.get('/:id/profile/edit', middleware.checkProfileOwnership, function(req, 
 
 router.put('/:id/profile/edit', middleware.checkProfileOwnership, function(req, res){
     User.findByIdAndUpdate(req.params.id, req.body.user, function (err, updatedUser) {
+        console.log(req.params.id);
+        console.log(req.body.user);
         if (err) {
             req.flash("error", "Fail to find the user");
             res.redirect("back");
         } else {
-            Feed.updateMany({_id: { $in: updatedUser.feed } }, {$set: {author: updatedUser}}, function(err){
+            Feed.updateMany({_id: { $in: updatedUser.feed } }, {$set: {author: req.body.user}}, function(err){
                 if (err) {
                     req.flash("error", "Something goes wrong!");
                     res.refirect("back");
                 } else {
-                    res.redirect("/user/" + req.params.id + "/profile");
-                    req.flash("success", "Successfully change your profile settings!");
+                    Comment.updateMany({_id: { $in: updatedUser.comment } }, {$set: {author: req.body.user}}, function (e) {
+                        if (e) {
+                            req.flash("error", "Something goes wrong!");
+                            res.refirect("back");
+                        } else {
+                            console.log(updatedUser);
+                            res.redirect("/user/" + req.params.id + "/profile");
+                            req.flash("success", "Successfully change your profile settings!");
+                        }
+                    });
                 }
             });
 
@@ -240,9 +257,20 @@ router.post('/:id/feed/:feed_id', middleware.isLoggedIn, function(req, res){
                     req.flash("error", "Something went wrong");
                     res.redirect("/user/" + req.params.id + "/feed/" + req.params.feed_id)
                 } else {
-                    feed.comment.push(newlyCreated._id);
-                    feed.save();
-                    res.redirect("/user/" + req.params.id + "/feed/" + req.params.feed_id);
+                    User.findById(author_id, function (e, user) {
+                        if (e) {
+                            req.flash("error", "Something went wrong");
+                            res.redirect("/user/" + req.params.id + "/feed/" + req.params.feed_id)
+                        } else {
+                            feed.comment.push(newlyCreated._id);
+                            feed.save();
+
+                            user.comment.push(newlyCreated._id);
+                            user.save();
+
+                            res.redirect("/user/" + req.params.id + "/feed/" + req.params.feed_id);
+                        }
+                    });
                 }
             });
         }
