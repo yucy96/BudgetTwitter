@@ -6,12 +6,6 @@ var Comment = require('../models/comment');
 var middleware = require("../middleware");
 
 
-async function wait (ms) {
-    return new Promise((resolve, reject) => {
-        setTimeout(resolve, ms)
-    });
-}
-
 /* GET users listing. */
 router.get('/:id/index', middleware.isLoggedIn, function(req, res, next) {
     Feed.find({}, function (err, feeds) {
